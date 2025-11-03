@@ -13,8 +13,8 @@ def login_aluno(nome, senha):
     else: 
         return False
 
-def login_professsor(nome, senha):
-    if nome in professores and professores[nome] == senha:
+def login_professor(nome, senha):
+    if nome in professores and professores[nome]["senha"] == senha:
         return True
     else: 
         return False
@@ -45,12 +45,36 @@ def main():
         if option == "1":
             nome = input("Nome do Professor: ")
             senha = input("Senha: ")
-            if login_professsor(nome, senha):
+            if login_professor(nome, senha):
                 print("Professor Loggado")
-                nome_aluno = input("digite o nome do Aluno")
-                nota = float(input("digite a nota (0 a 10)"))
+                nome_aluno = input("digite o nome do Aluno: ")
+                nota = float(input("digite a nota (0 a 10): "))
                 if adicionar_nota(nome_aluno, nota):
                     print("nota registrada")
                 else:
                     print("Erro ao registrar nota")
             else:
+                print("usuário ou senha incorretos")
+
+        elif option == "2":
+            nome = input("nome do Aluno: ")
+            senha = input("senha: ")
+            if login_aluno(nome, senha):
+                print("Aluno Loggado")
+                nota = consultar_nota(nome)
+                if nota is None:
+                    print("nenhuma nota foi registrada")
+                else: 
+                    print(f"Nota: {nota}")
+            else:
+                print("usuário ou senha incorretos")
+
+        elif option == "3":
+            print("fechando...")
+            break
+
+        else:
+            print("opção inválida")
+
+if __name__ == "__main__":
+    main()            
