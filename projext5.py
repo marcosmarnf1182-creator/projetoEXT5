@@ -100,8 +100,10 @@ def main():
                 nota = consultar_nota(nome)
                 if nota is None:
                     print("nenhuma nota foi registrada")
-                else: 
-                    print(f"Nota: {nota}")
+                elif nota >= 6:
+                    print(f"Nota: {nota} (Aprovado)")
+                elif nota < 6:
+                    print(f"Nota: {nota} (Reprovado)")
             else:
                 print("usuário ou senha incorretos")
 
