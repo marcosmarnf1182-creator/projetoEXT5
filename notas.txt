@@ -1,0 +1,3 @@
+Aluno: joao - Nota: 10.0
+Aluno: joao - Nota: 6.0
+Aluno: joao - Nota: 6.0
