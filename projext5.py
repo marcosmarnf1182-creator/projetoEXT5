@@ -1,23 +1,78 @@
 import os
 import sys
-from rich.console import Console
-from rich.theme import Theme
 
-# Tema personalizado (você pode ajustar cores aqui)
-custom_theme = Theme(
-    {
-        "title": "bold magenta",
-        "menu": "cyan",
-        "prompt": "bold bright_blue",
-        "success": "green",
-        "error": "bold red",
-        "warning": "yellow",
-        "info": "cyan",
-        "highlight": "bold bright_blue",
+# Cores ANSI (sem dependências externas)
+class Colors:
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+    
+    # Cores básicas
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    
+    # Cores brilhantes
+    BRIGHT_BLACK = '\033[90m'
+    BRIGHT_RED = '\033[91m'
+    BRIGHT_GREEN = '\033[92m'
+    BRIGHT_YELLOW = '\033[93m'
+    BRIGHT_BLUE = '\033[94m'
+    BRIGHT_MAGENTA = '\033[95m'
+    BRIGHT_CYAN = '\033[96m'
+    BRIGHT_WHITE = '\033[97m'
+    
+    # Estilos personalizados (mantendo as mesmas cores do tema rich)
+    @staticmethod
+    def title(text):
+        return f"{Colors.BOLD}{Colors.MAGENTA}{text}{Colors.RESET}"
+    
+    @staticmethod
+    def menu(text):
+        return f"{Colors.CYAN}{text}{Colors.RESET}"
+    
+    @staticmethod
+    def prompt(text):
+        return f"{Colors.BOLD}{Colors.BRIGHT_BLUE}{text}{Colors.RESET}"
+    
+    @staticmethod
+    def success(text):
+        return f"{Colors.GREEN}{text}{Colors.RESET}"
+    
+    @staticmethod
+    def error(text):
+        return f"{Colors.BOLD}{Colors.RED}{text}{Colors.RESET}"
+    
+    @staticmethod
+    def warning(text):
+        return f"{Colors.YELLOW}{text}{Colors.RESET}"
+    
+    @staticmethod
+    def info(text):
+        return f"{Colors.CYAN}{text}{Colors.RESET}"
+
+def print_colored(text, style='info'):
+    """Imprime texto colorido de acordo com o estilo"""
+    styles = {
+        'title': Colors.title,
+        'menu': Colors.menu,
+        'success': Colors.success,
+        'error': Colors.error,
+        'warning': Colors.warning,
+        'info': Colors.info,
     }
-)
+    if style in styles:
+        print(styles[style](text))
+    else:
+        print(text)
 
-console = Console(theme=custom_theme)
+def input_colored(prompt_text):
+    """Input com prompt colorido"""
+    return input(Colors.prompt(prompt_text))
 
 # ____________________________________________________________________
 
@@ -70,9 +125,9 @@ def carregar_notas():
                     try:
                         alunos[nome]["nota"] = float(nota)
                     except ValueError:
-                        console.print(
+                        print_colored(
                             f"Aviso: nota inválida no arquivo para {nome}: {nota}",
-                            style="warning",
+                            style="warning"
                         )
 
 
@@ -105,56 +160,61 @@ def consultar_nota(nome):
 
 
 def main():
-    console.print("== SISTEMA DE NOTAS ==", style="title")
+    print_colored("== SISTEMA DE NOTAS ==", style="title")
 
-    while True:
-        console.print()
-        console.print("1 - login como professor", style="menu")
-        console.print("2 - login como aluno", style="menu")
-        console.print("3 - sair", style="menu")
-        option = console.input("[prompt]Escolha uma opção[/prompt]: ")
+    try:
+        while True:
+            print()
+            print_colored("1 - login como professor", style="menu")
+            print_colored("2 - login como aluno", style="menu")
+            print_colored("3 - sair", style="menu")
+            option = input_colored("Escolha uma opção: ")
 
-        if option == "1":
-            nome = console.input("[prompt]Nome do Professor[/prompt]: ")
-            senha = console.input("[prompt]Senha[/prompt]: ")
-            if login_professor(nome, senha):
-                console.print("Professor Loggado", style="success")
-                nome_aluno = console.input("[prompt]digite o nome do Aluno[/prompt]: ")
-                nota_str = console.input("[prompt]digite a nota (0 a 10)[/prompt]: ")
-                try:
-                    nota = float(nota_str)
-                except ValueError:
-                    console.print("Nota inválida. Use um número entre 0 e 10.", style="error")
-                    continue
+            if option == "1":
+                nome = input_colored("Nome do Professor: ")
+                senha = input_colored("Senha: ")
+                if login_professor(nome, senha):
+                    print_colored("Professor Loggado", style="success")
+                    nome_aluno = input_colored("digite o nome do Aluno: ")
+                    nota_str = input_colored("digite a nota (0 a 10): ")
+                    try:
+                        nota = float(nota_str)
+                    except ValueError:
+                        print_colored("Nota inválida. Use um número entre 0 e 10.", style="error")
+                        continue
 
-                if adicionar_nota(nome_aluno, nota):
-                    console.print("nota registrada", style="success")
+                    if adicionar_nota(nome_aluno, nota):
+                        print_colored("nota registrada", style="success")
+                    else:
+                        print_colored("Erro ao registrar nota", style="error")
                 else:
-                    console.print("Erro ao registrar nota", style="error")
-            else:
-                console.print("usuário ou senha incorretos", style="error")
+                    print_colored("usuário ou senha incorretos", style="error")
 
-        elif option == "2":
-            nome = console.input("[prompt]nome do Aluno[/prompt]: ")
-            senha = console.input("[prompt]senha[/prompt]: ")
-            if login_aluno(nome, senha):
-                console.print("Aluno Loggado", style="success")
-                nota = consultar_nota(nome)
-                if nota is None:
-                    console.print("nenhuma nota foi registrada", style="info")
-                elif nota >= 6:
-                    console.print(f"Nota: {nota} (Aprovado)", style="success")
+            elif option == "2":
+                nome = input_colored("nome do Aluno: ")
+                senha = input_colored("senha: ")
+                if login_aluno(nome, senha):
+                    print_colored("Aluno Loggado", style="success")
+                    nota = consultar_nota(nome)
+                    if nota is None:
+                        print_colored("nenhuma nota foi registrada", style="info")
+                    elif nota >= 6:
+                        print_colored(f"Nota: {nota} (Aprovado)", style="success")
+                    else:
+                        print_colored(f"Nota: {nota} (Reprovado)", style="warning")
                 else:
-                    console.print(f"Nota: {nota} (Reprovado)", style="warning")
+                    print_colored("usuário ou senha incorretos", style="error")
+
+            elif option == "3":
+                print_colored("fechando...", style="info")
+                break
+
             else:
-                console.print("usuário ou senha incorretos", style="error")
-
-        elif option == "3":
-            console.print("fechando...", style="info")
-            break
-
-        else:
-            console.print("opção inválida", style="error")
+                print_colored("opção inválida", style="error")
+    except KeyboardInterrupt:
+        print_colored("\n\nEncerrando o sistema... Até logo!", style="info")
+    except EOFError:
+        print_colored("\n\nEncerrando o sistema... Até logo!", style="info")
 
 
 if __name__ == "__main__":
@@ -162,12 +222,12 @@ if __name__ == "__main__":
 
     # Modo demo: mostra exemplos de estilos e encerra — útil para testar
     if "--demo" in sys.argv:
-        console.print("== DEMO DE CORES E ESTILOS ==", style="title")
-        console.print("Mensagem de sucesso", style="success")
-        console.print("Mensagem informativa", style="info")
-        console.print("Mensagem de aviso", style="warning")
-        console.print("Mensagem de erro", style="error")
-        console.print("Prompt exemplo", style="prompt")
+        print_colored("== DEMO DE CORES E ESTILOS ==", style="title")
+        print_colored("Mensagem de sucesso", style="success")
+        print_colored("Mensagem informativa", style="info")
+        print_colored("Mensagem de aviso", style="warning")
+        print_colored("Mensagem de erro", style="error")
+        print(Colors.prompt("Prompt exemplo"))
         sys.exit(0)
 
     main()

@@ -1,2 +1,2 @@
-joao:5.6
-maria:6.0
+joao:8.0
+maria:5.0
