@@ -84,6 +84,7 @@ professores = {"Armando": {"senha": "prof123"}}
 
 
 notasfile = os.path.join(os.path.dirname(__file__), "notas.txt")
+
 # ____________________________________________________________________
 
 
@@ -141,7 +142,7 @@ def adicionar_nota(nome_aluno, nota):
     key = _find_key(alunos, nome_aluno)
     if not key:
         return False
-    if nota < 0 or nota > 10:
+    if nota < 0:
         return False
     alunos[key]["nota"] = nota
     salvar_notas()
@@ -173,7 +174,6 @@ def main():
                 nome = input_colored("Nome do Professor: ")
                 senha = input_colored("Senha: ")
                 if login_professor(nome, senha):
-                    print_colored("Professor Loggado", style="success")
                     print_colored("Professor Logado", style="success")
                     nome_aluno = input_colored("digite o nome do Aluno: ")
                     nota_str = input_colored("digite a nota (0 a 10): ")
@@ -194,7 +194,6 @@ def main():
                 nome = input_colored("nome do Aluno: ")
                 senha = input_colored("senha: ")
                 if login_aluno(nome, senha):
-                    print_colored("Aluno Loggado", style="success")
                     print_colored("Aluno Logado", style="success")
                     nota = consultar_nota(nome)
                     if nota is None:

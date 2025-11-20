@@ -15,8 +15,8 @@ print("Entrada: adicionar_nota('joao', 8.5)")
 print("Resultado:", adicionar_nota("joao", 8.5))
 print("Entrada: adicionar_nota('fake', 7.0)")
 print("Resultado:", adicionar_nota("fake", 7.0))
-print("Entrada: adicionar_nota('maria', 11.0)")
-print("Resultado:", adicionar_nota("maria", 11.0))
+print("Entrada: adicionar_nota('joao', 11.0)")
+print("Resultado:", adicionar_nota("joao", 11.0))
 print("-" * 40)
 
 # CT03 — Caixa Cinza: persistência
