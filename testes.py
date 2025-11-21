@@ -11,12 +11,12 @@ print("-" * 40)
 
 # CT02 — Caixa Branca: adicionar nota
 print("CT02 — Adicionar Nota (Caixa Branca)")
-print("Entrada: adicionar_nota('joao', 8.5)")
-print("Resultado:", adicionar_nota("joao", 8.5))
+print("Entrada: adicionar_nota('joao', 11)")
+print("Resultado:", adicionar_nota("joao", 11))
 print("Entrada: adicionar_nota('fake', 7.0)")
 print("Resultado:", adicionar_nota("fake", 7.0))
-print("Entrada: adicionar_nota('joao', 11.0)")
-print("Resultado:", adicionar_nota("joao", 11.0))
+print("Entrada: adicionar_nota('joao', 8.5)")
+print("Resultado:", adicionar_nota("joao", 8.5))
 print("-" * 40)
 
 # CT03 — Caixa Cinza: persistência
@@ -26,9 +26,11 @@ print("Resultado da consulta após salvar:", consultar_nota("joao"))
 print("-" * 40)
 
 # CT04 — Erro esperado: aluno sem nota
-print("CT04 — Consulta de Aluno sem Nota (Erro Esperado)")
+print("CT04 — Consulta de Aluno sem Nota")
 print("Entrada: consultar_nota('maria')")
 print("Resultado:", consultar_nota("maria"))
+if consultar_nota("maria") is None:    
+    print("nenhuma nota foi registrada")
 print("-" * 40)
 
 # CT05 — Erro esperado: nome em maiúsculas
